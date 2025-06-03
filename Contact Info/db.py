@@ -18,9 +18,9 @@ def add_contact(contact):
     with sqlite3.connect("contacts.db") as conn:
         cursor = conn.cursor()
         cursor.execute("""
-            INSERT INTO contacts (id, name, email, phone)
-            VALUES (?, ?, ?, ?)
-        """, (contact.contactID, contact.name, contact.email, contact.phoneNumber))
+            INSERT INTO contacts (name, email, phone)
+            VALUES (?, ?, ?)
+        """, (contact.name, contact.email, contact.phoneNumber))
 
 def is_duplicate(contact):
     with sqlite3.connect("contacts.db") as conn:
