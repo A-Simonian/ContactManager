@@ -25,6 +25,20 @@ def search_by_id(query):
     rows = run_query(sql, params)
     return [Contact(*row) for row in rows]
 
+def search_all_fields(query):
+    sql = """
+        SELECT id, name, email, phone FROM contacts
+        WHERE LOWER(name) LIKE ?
+           OR LOWER(email) LIKE ?
+           OR phone LIKE ?
+           OR CAST(id AS TEXT) = ?
+    """
+    query_like = f"%{query.lower()}%"
+    params = (query_like, query_like, f"%{query}%", query)
+    rows = run_query(sql, params)
+    return [Contact(*row) for row in rows]
+
+
 def search():
     print("Search by:")
     print("1. Name")

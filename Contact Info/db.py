@@ -46,22 +46,27 @@ def run_query(sql, params=()):
         return cursor.fetchall()
 
 def delete_contact(contact_id):
-    with sqlite3.connect("contacts.db") as conn:
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM contacts WHERE id = ?", (contact_id,))
-        conn.commit()
-        return cursor.rowcount
+    conn = sqlite3.connect("contacts.db")
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM contacts WHERE id = ?", (contact_id,))
+    conn.commit()
+    deleted = cursor.rowcount
+    conn.close()
+    return deleted > 0
+
 
 def update_contact(contact_id, name, email, phone):
-    with sqlite3.connect("contacts.db") as conn:
-        cursor = conn.cursor()
-        cursor.execute("""
-            UPDATE contacts
-            SET name = ?, email = ?, phone = ?
-            WHERE id = ?
-        """, (name, email, phone, contact_id))
-        conn.commit()
-        return cursor.rowcount
+    conn = sqlite3.connect("contacts.db")
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE contacts SET name = ?, email = ?, phone = ? WHERE id = ?",
+        (name, email, phone, contact_id)
+    )
+    conn.commit()
+    updated = cursor.rowcount
+    conn.close()
+    return updated > 0
+
 
 
 
